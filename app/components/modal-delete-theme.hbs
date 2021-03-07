@@ -1,13 +1,13 @@
 <header class="modal-header" data-test-delete-theme-modal>
-    <h1>Are you sure you want to delete this</h1>
+    <h1>이 테마를 삭제하시겠습니까?</h1>
 </header>
-<a class="close" href="" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">Close</span></a>
+<a class="close" href="" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">취소</span></a>
 
 <div class="modal-body">
-    <p>You're about to delete "<strong>{{this.theme.label}}</strong>". This is permanent! We warned you, k? Maybe <a href="#" {{action this.download}}>download your theme before continuing</a></p>
+    <p>"<strong>{{this.theme.label}}</strong>" 삭제를 진행 중입니다. 이 작업은 영구적입니다. 혹시 모르니 <a href="#" {{action this.download}}>삭제 진행 전 테마를 다운로드하세요</a></p>
 </div>
 
 <div class="modal-footer">
-    <button {{action "closeModal"}} class="gh-btn" data-test-cancel-button><span>Cancel</span></button>
+    <button {{action "closeModal"}} class="gh-btn" data-test-cancel-button><span>취소</span></button>
     <GhTaskButton @buttonText="Delete" @successText="Deleted" @task={{this.deleteTheme}} @class="gh-btn gh-btn-red gh-btn-icon" data-test-delete-button="true" />
 </div>

@@ -1,12 +1,12 @@
 <header class="modal-header">
-    <h1>Check your Inbox</h1>
+    <h1>메일함을 확인하세요</h1>
 </header>
-<a class="close" href="" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">Close</span></a>
+<a class="close" href="" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">닫기</span></a>
 
 <div class="modal-body">
-    We have sent an email to confirm you own <b>{{this.fromAddress}}</b>.
+    <b>{{this.fromAddress}}</b> 확인을 위하여 메일을 전송했습니다.
 </div>
 
 <div class="modal-footer">
-    <button {{action "closeModal"}} class="gh-btn"><span>Close</span></button>
+    <button {{action "closeModal"}} class="gh-btn"><span>닫기</span></button>
 </div>

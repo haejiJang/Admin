@@ -1,9 +1,9 @@
 <section class="gh-canvas">
     <GhCanvasHeader class="gh-canvas-header">
         <h2 class="gh-canvas-title" data-test-screen-title>
-            <LinkTo @route="settings">Settings</LinkTo>
+            <LinkTo @route="settings">설정</LinkTo>
             <span>{{svg-jar "arrow-right"}}</span>
-            Theme
+            테마
         </h2>
     </GhCanvasHeader>
 
@@ -16,7 +16,7 @@
 
     <section class="view-container">
         <div class="gh-setting-header gh-first-header flex justify-between">
-            <span>Ghost theme directory</span>
+            <span>테마 디렉토리</span>
             <a href="https://ghost.org/marketplace/" target="_blank" rel="noopener noreferrer" class="gh-td-marketplace">
                 <span>View more {{svg-jar "arrow-right-small"}}</span>
             </a>
@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <div class="gh-setting-header">Installed Themes</div>
+        <div class="gh-setting-header">설치된 테마</div>
         <div class="gh-themes-container">
 
             <GhThemeTable
@@ -52,11 +52,11 @@
 
             <div class="flex justify-between mt6">
                 <LinkTo id="upload-theme" @route="settings.theme.uploadtheme" class="gh-btn gh-btn-green" data-test-button="uploadtheme">
-                    <span>Upload a theme</span>
+                    <span>테마 업로드</span>
                 </LinkTo>
 
                 <a href="https://ghost.org/docs/themes/" target=_"blank" rel="noopener noreferrer" class="gh-btn gh-btn-outline">
-                    <span>Theme developer docs</span>
+                    <span>테마 개발 문서</span>
                 </a>
             </div>
 

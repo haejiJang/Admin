@@ -1,13 +1,13 @@
 <header class="modal-header">
-    <h1>Are you sure you want to un-suspend this user?</h1>
+    <h1>이 사용자의 정지를 해지하시겠습니까?</h1>
 </header>
-<a class="close" href="" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">Close</span></a>
+<a class="close" href="" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">취소</span></a>
 
 <div class="modal-body">
-    <strong>WARNING:</strong> This user will be able to log in again and will have the same permissions they had previously.
+    <strong>경고:</strong> 이 사용자의 로그인이 가능하고, 전에 가졌던 권한과 똑같은 권한을 가집니다.
 </div>
 
 <div class="modal-footer">
-    <button {{action "closeModal"}} class="gh-btn"><span>Cancel</span></button>
+    <button {{action "closeModal"}} class="gh-btn"><span>취소</span></button>
     <GhTaskButton @buttonText="Un-suspend" @successText="Suspended" @task={{this.unsuspendUser}} @class="gh-btn gh-btn-red gh-btn-icon" data-test-modal-confirm="true" />
 </div>

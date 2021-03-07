@@ -1,10 +1,11 @@
 <header class="modal-header">
-    <h1>Regenerate your Personal Token</h1>
+    <h1>사용자 토큰 재생성하기</h1>
 </header>
 <a class="close" href="" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">Close</span></a>
 
 <div class="modal-body">
     <p>
+        사용자 토큰은 원할 때마다 재생성 할 수 있지만, 이 토큰을 사용하는 Scripts 나 Applications에 대한 업데이트가 필요합니다
         You can regenerate your Personal Token any time, but any scripts or applications using it will need to be updated.
     </p>
     {{#if this.errorMessage}}
@@ -13,8 +14,8 @@
 </div>
 
 <div class="modal-footer">
-    <button {{action "closeModal"}} class="gh-btn" autofocus><span>Cancel</span></button>
+    <button {{action "closeModal"}} class="gh-btn" autofocus><span>취소</span></button>
     <button class="gh-btn gh-btn-icon gh-btn-red" {{action "confirm"}}>
-        <span>Regenerate your Personal Token</span>
+        <span>사용자 토큰 재생성하기</span>
     </button>
 </div>

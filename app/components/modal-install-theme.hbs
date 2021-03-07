@@ -3,14 +3,14 @@
         <h1>
             {{#if this.installSuccess}}
                 {{#if this.hasWarningsOrErrors}}
-                    Install successful with {{#if this.validationErrors}}errors{{else}}warnings{{/if}}
+                    설치 완료 with {{#if this.validationErrors}}오류{{else}}경고{{/if}}
                 {{else}}
-                    Install successful!
+                    설치 완료!
                 {{/if}}
             {{else if this.hasWarningsOrErrors}}
-                Invalid theme
+                잘못된 테마
             {{else}}
-                Install theme
+                테마 설치
             {{/if}}
         </h1>
     </header>
@@ -19,12 +19,12 @@
     <div class="modal-body">
         {{#if this.isReady}}
             <p>
-                You're about to install <strong>{{this.themeName}}</strong> from the theme directory.
+                테마 디렉토리로부터 <strong>{{this.themeName}}</strong> 테마 설치를 진행 중 입니다.
             </p>
             {{#if this.willOverwriteExisting}}
                 <p>
-                    This will overwrite your existing version of {{this.themeName}}{{if this.willOverwriteExisting.active " which is your active theme"}}.
-                    Any custom changes will be lost.
+                    이미 존재하는 {{this.themeName}}{{if this.willOverwriteExisting.active " which is your active theme"}} 테마를 덮어씁니다.
+                    커스텀 변화는 사라집니다.
                 </p>
             {{/if}}
 
@@ -37,40 +37,40 @@
 
         {{#if this.willOverwriteDefault}}
             <p>
-                Sorry, the default Casper theme cannot be overwritten.<br>
-                If you wish to make changes please download the theme and upload a renamed zip file.
+                죄송합니다, 기본값인 Casper 테마는 덮어쓸 수 없습니다. <br>
+                테마 다운로드 후 이름을 재설정한 Zip 파일을 업로드하세요.
             </p>
         {{/if}}
 
         {{#if this.installSuccess}}
             {{#if this.hasWarningsOrErrors}}
                 <p>
-                    The theme <strong>"{{this.themeName}}"</strong> was installed successfully but we detected some {{if this.validationErrors "errors" "warnings"}}.
-                    {{#unless this.theme.active}}
-                        You are still able to activate and use the theme but it is recommended to fix these {{if this.validationErrors "errors" "warnings"}} before you do so.
-                    {{/unless}}
+                    <strong>"{{this.themeName}}"</strong> 테마가 안정적으로 설치됐지만, {{if this.validationErrors "오류" "경로"}} 를 발견하였습니다.
+                    {{#if this.canActivateTheme}}
+                        물론 지금 테마를 활성화하고 사용할 수 있지만, {{if this.validationErrors "오류" "경고"}} 를 해결한 후에 사용하시길 추천합니다.
+                    {{/if}}
                 </p>
             {{else}}
                 {{!-- Installed with no errors --}}
-                <p>The theme <strong>"{{this.themeName}}"</strong> was installed successfully. {{unless this.theme.active "Do you want to activate it now?"}}</p>
+                <p> <strong>"{{this.themeName}}"</strong> 테마 설치가 완료됐습니다. {{unless this.theme.active "지금 활성화 하시겠어요?"}}</p>
             {{/if}}
         {{/if}}
 
         {{#if this.installError}}
             {{!-- Outright failure - not found, not a theme, server error, etc --}}
-            <p>{{this.themeName}} failed to install.</p>
+            <p>{{this.themeName}} 설치를 실패했습니다</p>
             <p class="error"><strong class="response">{{this.installError}}</strong></p>
         {{/if}}
 
         {{#if this.installFailure}}
             {{!-- Invalid theme --}}
-            <p>This theme is invalid and cannot be activated. Contact the theme developer.</p>
+            <p>이런! 이 테마에서 결함이 발견됐습니다. 테마 개발자에게 도움을 요청하세요.</p>
         {{/if}}
 
         {{#if this.fatalValidationErrors}}
             <div>
-                <h2 class="mb0 mt4 f5 fw6">Fatal Errors</h2>
-                <p class="mb2">Must-fix to activate theme</p>
+                <h2 class="mb0 mt4 f5 fw6">치명적인 오류</h2>
+                <p class="mb2">필수 수정 사항</p>
             </div>
 
             <ul class="pa0">
@@ -84,8 +84,8 @@
 
         {{#if this.validationErrors}}
             <div>
-                <h2 class="mb0 mt4 f5 fw6">Errors</h2>
-                <p class="mb2">Highly recommended to fix, functionality <strong>could</strong> be restricted</p>
+                <h2 class="mb0 mt4 f5 fw6">오류</h2>
+                <p class="mb2">꼭 수정후에 사용하시는 걸 추천합니다. 기능에 제한이 생길 수 있습니다.</p>
             </div>
             <ul class="pa0">
             {{#each this.validationErrors as |error|}}
@@ -98,7 +98,7 @@
 
         {{#if this.validationWarnings}}
             <div>
-                <h2 class="mb0 mt4 f5 fw6">Warnings</h2>
+                <h2 class="mb0 mt4 f5 fw6">경고</h2>
             </div>
             <ul class="pa0">
             {{#each this.validationWarnings as |error|}}
@@ -113,7 +113,7 @@
     <div class="modal-footer">
         <div class="flex items-center justify-between {{if this.hasActionButton "flex-auto"}}">
             <button type="button" class="gh-btn" {{on "click" this.close}} data-test-button="cancel">
-                <span>{{#if (or this.installSuccess this.installFailure)}}Close{{else}}Cancel{{/if}}</span>
+                <span>{{#if (or this.installSuccess this.installFailure)}}닫기{{else}}취소{{/if}}</span>
             </button>
 
             {{#if this.hasActionButton}}
@@ -122,7 +122,7 @@
                         <GhTaskButton
                             @task={{this.installTask}}
                             @type="button"
-                            @class="gh-btn gh-btn-icon gh-btn-black"
+                            @class="gh-btn gh-btn-icon gh-btn-green"
                             @buttonText={{if this.willOverwriteExisting "Overwrite" "Install"}}
                             @runningText="Installing"
                             @successText="Installed"
@@ -134,7 +134,7 @@
                         <GhTaskButton
                             @task={{this.activateTask}}
                             @type="button"
-                            @class="gh-btn gh-btn-icon gh-btn-black"
+                            @class="gh-btn gh-btn-icon gh-btn-green"
                             @buttonText="Activate"
                             @runningText="Activating"
                             data-test-button="activate"

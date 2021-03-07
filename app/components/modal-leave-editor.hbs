@@ -1,18 +1,17 @@
 <header class="modal-header">
-    <h1>Are you sure you want to leave this page?</h1>
+    <h1>잠깐만요! 저장되지 않은 상태에서 가시게요?</h1>
 </header>
 <a class="close" href="" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">Close</span></a>
 
 <div class="modal-body">
     <p>
-        Hey there! It looks like you're in the middle of writing something and
-        you haven't saved all of your content.
+        안녕하세요! 글을 작성하고 계셨던 것 같은데 저장되지 않았습니다.
     </p>
 
-    <p>Save before you go!</p>
+    <p>가시기 전에 저장하고 가세요 :)</p>
 </div>
 
 <div class="modal-footer">
-    <button {{action "closeModal"}} class="gh-btn"><span>Stay</span></button>
-    <button {{action "confirm"}} class="gh-btn gh-btn-red"><span>Leave</span></button>
+    <button {{action "closeModal"}} class="gh-btn"><span>머무르기</span></button>
+    <button {{action "confirm"}} class="gh-btn gh-btn-red"><span>나가기</span></button>
 </div>

@@ -40,27 +40,27 @@
                         @classNames="gh-member-actions-menu dropdown-menu dropdown-triangle-top-right">
                         <li>
                             <LinkTo @route="members.import" class="mr2" data-test-link="import-csv">
-                                <span>Import members</span>
+                                <span>멤버 리스트 업로드</span>
                             </LinkTo>
                         </li>
                         <li class="{{if this.members.length "" "disabled"}}">
                             {{#if this.members.length}}
                                 <button class="mr2" {{on "click" this.exportData}}>
                                     {{#if this.showingAll}}
-                                        <span>Export all members</span>
+                                        <span>멤버 리스트 다운로드</span>
                                     {{else}}
-                                    <span>Export selected members ({{this.members.length}})</span>
+                                    <span>선택된 멤버 리스트 다운로드 ({{this.members.length}})</span>
                                     {{/if}}
                                 </button>
                             {{else}}
                                 <button class="mr2" disabled="true">
-                                    <span>Export selected members (0)</span>
+                                    <span>선택된 멤버 리스트 다운로드 (0)</span>
                                 </button>
                             {{/if}}
                         </li>
                     </GhDropdown>
                 </span>
-                <LinkTo @route="member.new" class="gh-btn gh-btn-primary" data-test-new-member-button="true"><span>New member</span></LinkTo>
+                <LinkTo @route="member.new" class="gh-btn gh-btn-primary" data-test-new-member-button="true"><span>새로운 멤버</span></LinkTo>
             </div>
         </section>
     </GhCanvasHeader>
@@ -90,10 +90,10 @@
                             <div class="no-posts">
                                 {{svg-jar "members-placeholder" class="gh-members-placeholder"}}
                                 {{#if this.showingAll}}
-                                    <h3>No members yet</h3>
+                                    <h3>아직 멤버가 없습니다</h3>
                                     <GhMembersNoMembers @afterCreate={{this.refreshData}} />
                                 {{else}}
-                                    <h3>No members match the current filter</h3>
+                                    <h3>현재 필터와 매치되는 멤버가 없습니다</h3>
                                 {{/if}}
                             </div>
                         </li>

@@ -1,6 +1,6 @@
 {{#unless this.errorMessage}}
     <header class="modal-header" data-test-modal="delete-user">
-        <h1>Ready to go? Here’s what happens next</h1>
+        <h1>이제 독자들에게 메일로 전송할까요?</h1>
     </header>
     <button class="close" title="Close" {{on "click" this.closeModal}}>{{svg-jar "close"}}<span class="hidden">Close</span></button>
 
@@ -11,49 +11,49 @@
              </div>
         {{else}}
             <p>
-                Your post will be delivered to
+                다음 멤버들에게 메일이 전송됩니다 <br>
                 <strong>
-                    {{#if (eq this.model.sendEmailWhenPublished 'paid')}}
+                    {{#if (eq this.model.sendEmailWhenPublished '유료 멤버')}}
                         {{!-- TODO: remove editor fallback once editors can query member counts --}}
-                        {{if this.session.user.isEditor "all paid members" (gh-pluralize this.paidMemberCount "paid member")}}
-                    {{else if (eq this.model.sendEmailWhenPublished 'free')}}
+                        {{if this.session.user.isEditor "모든 유료 멤버" (gh-pluralize this.paidMemberCount "유료 멤버")}}
+                    {{else if (eq this.model.sendEmailWhenPublished '무료 멤버')}}
                         {{!-- TODO: remove editor fallback once editors can query member counts --}}
-                        {{if this.session.user.isEditor "all free members" (gh-pluralize this.freeMemberCount "free member")}}
+                        {{if this.session.user.isEditor "모든 무료 멤버" (gh-pluralize this.freeMemberCount "무료 멤버")}}
                     {{else}}
                         {{!-- TODO: remove editor fallback once editors can query member counts --}}
-                        {{if this.session.user.isEditor "all members" (gh-pluralize this.model.memberCount "member")}}
+                        {{if this.session.user.isEditor "모든 멤버" (gh-pluralize this.model.memberCount "멤버")}}
                     {{/if}}
                 </strong>
-                and will be published on your site{{#if this.model.isScheduled}} at the scheduled time{{/if}}. Sound good?
+                그리고 사이트에 {{#if this.model.isScheduled}}설정한 시간에{{/if}} 게시될 예정입니다.
             </p>
         {{/if}}
     </div>
 
     <div class="modal-footer">
         <button {{on "click" this.closeModal}} class="gh-btn" data-test-button="cancel-publish-and-email">
-            <span>Cancel</span>
+            <span>취소</span>
         </button>
         <GhTaskButton
             @disabled={{this.countPaidMembersTask.isRunning}}
             @buttonText={{if this.model.isScheduled "Schedule" "Publish and send"}}
             @runningText={{if this.model.isScheduled "Scheduling..." "Publishing..."}}
             @task={{this.confirmAndCheckErrorTask}}
-            @class="gh-btn gh-btn-black gh-btn-icon"
+            @class="gh-btn gh-btn-green gh-btn-icon"
             data-test-button="confirm-publish-and-email"
         />
     </div>
 
 {{else}}
     <header class="modal-header" data-test-modal="delete-user">
-        <h1>Failed to send email</h1>
+        <h1>메일 전송 실패</h1>
     </header>
     <button class="close" title="Close" {{on "click" this.closeModal}}>{{svg-jar "close"}}<span class="hidden">Close</span></button>
 
     <div class="modal-body">
         {{#if this.session.user.isOwner}}
-            <p>Your post has been published but the email failed to send. Please verify your email settings if the error persists.</p>
+            <p>글이 게시됐지만 이메일 전송에는 실패했습니다. 오류가 계속된다면 이메일 설정을 확인하세요.</p>
         {{else}}
-            <p>Your post has been published but the email failed to send. Please verify your email settings if the error persists.</p>
+            <p>글이 게시됐지만 이메일 전송에는 실패했습니다. 오류가 계속된다면 이메일 설정을 확인하세요.</p>
         {{/if}}
         <p class="mb0">
             <button type="button" class="gh-btn gh-btn-text regular" {{action (toggle "errorDetailsOpen" this)}} data-test-toggle-error>
@@ -62,7 +62,7 @@
                 {{else}}
                 {{svg-jar "arrow-right" class="nudge-top--1 w2 h2 fill-darkgrey mr1"}}
                 {{/if}}
-                <span>Error details</span>
+                <span>오류 세부사항</span>
             </button>
         </p>
 
@@ -76,7 +76,7 @@
 
     <div class="modal-footer">
         <button {{on "click" this.closeModal}} class="gh-btn" data-test-button="cancel-publish-and-email">
-            <span>Close</span>
+            <span>닫기</span>
         </button>
         <GhTaskButton
             @buttonText="Retry email"

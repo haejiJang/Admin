@@ -1,17 +1,17 @@
 <header class="modal-header" data-test-modal="unsaved-settings">
-    <h1>Are you sure you want to leave this page?</h1>
+    <h1>잠깐만요! 저장되지 않은 상태에서 가시게요?</h1>
 </header>
 <a class="close" href="" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">Close</span></a>
 
 <div class="modal-body">
     <p>
-        Hey there! It looks like you didn't save the changes you made.
+        안녕하세요! 무언가 수정 중이었던 것 같은데 바뀐 내용이 저장되지 않았습니다.
     </p>
 
-    <p>Save before you go!</p>
+    <p>가시기 전에 저장하고 가세요 :)</p>
 </div>
 
 <div class="modal-footer">
-    <button {{action "closeModal"}} class="gh-btn" data-test-stay-button><span>Stay</span></button>
-    <button {{action "confirm"}} class="gh-btn gh-btn-red" data-test-leave-button><span>Leave</span></button>
+    <button {{action "closeModal"}} class="gh-btn" data-test-stay-button><span>머무르기</span></button>
+    <button {{action "confirm"}} class="gh-btn gh-btn-red" data-test-leave-button><span>나가기</span></button>
 </div>
