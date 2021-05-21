@@ -9,7 +9,7 @@ import validator from 'validator';
 import {alias} from '@ember/object/computed';
 import {computed} from '@ember/object';
 import {A as emberA} from '@ember/array';
-import {htmlSafe} from '@ember/string';
+import {htmlSafe} from '@ember/template';
 import {isInvalidError} from 'ember-ajax/errors';
 import {run} from '@ember/runloop';
 import {inject as service} from '@ember/service';
@@ -20,6 +20,7 @@ const {Errors} = DS;
 export default Controller.extend({
     two: controller('setup/two'),
     notifications: service(),
+    session: service(),
 
     users: '',
 
@@ -123,7 +124,7 @@ export default Controller.extend({
         },
 
         skipInvite() {
-            this.send('loadServerNotifications');
+            this.session.loadServerNotifications();
             this.transitionToRoute('home');
         }
     },
@@ -176,7 +177,7 @@ export default Controller.extend({
             this._showNotifications(invites);
 
             run.schedule('actions', this, function () {
-                this.send('loadServerNotifications');
+                this.session.loadServerNotifications();
                 this._transitionAfterSubmission();
             });
         } else if (users.length === 0) {

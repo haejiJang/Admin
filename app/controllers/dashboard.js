@@ -12,52 +12,38 @@ export default class DashboardController extends Controller {
     @service settings;
     @service whatsNew;
 
-    @tracked
-    eventsData = null;
-    @tracked
-    eventsError = null;
-    @tracked
-    eventsLoading = false;
+    @tracked eventsData = null;
+    @tracked eventsError = null;
+    @tracked eventsLoading = false;
 
-    @tracked
-    mrrStatsData = null;
-    @tracked
-    mrrStatsError = null;
-    @tracked
-    mrrStatsLoading = false;
+    @tracked mrrStatsData = null;
+    @tracked mrrStatsError = null;
+    @tracked mrrStatsLoading = false;
 
-    @tracked
-    memberCountStatsData = null;
-    @tracked
-    memberCountStatsError = null;
-    @tracked
-    memberCountStatsLoading = false;
+    @tracked memberCountStatsData = null;
+    @tracked memberCountStatsError = null;
+    @tracked memberCountStatsLoading = false;
 
-    @tracked
-    topMembersData = null;
-    @tracked
-    topMembersError = null;
-    @tracked
-    topMembersLoading = false;
+    @tracked topMembersData = null;
+    @tracked topMembersError = null;
+    @tracked topMembersLoading = false;
 
-    @tracked
-    newsletterOpenRatesData = null;
-    @tracked
-    newsletterOpenRatesError = null;
-    @tracked
-    newsletterOpenRatesLoading = false;
+    @tracked newsletterOpenRatesData = null;
+    @tracked newsletterOpenRatesError = null;
+    @tracked newsletterOpenRatesLoading = false;
 
-    @tracked
-    whatsNewEntries = null;
-    @tracked
-    whatsNewEntriesLoading = null;
-    @tracked
-    whatsNewEntriesError = null;
+    @tracked whatsNewEntries = null;
+    @tracked whatsNewEntriesLoading = null;
+    @tracked whatsNewEntriesError = null;
 
     get topMembersDataHasOpenRates() {
         return this.topMembersData && this.topMembersData.find((member) => {
             return member.emailOpenRate !== null;
         });
+    }
+
+    get showMembersData() {
+        return this.settings.get('membersSignupAccess') !== 'none';
     }
 
     initialise() {
@@ -71,19 +57,24 @@ export default class DashboardController extends Controller {
         this.mrrStatsLoading = true;
         this.membersStats.fetchMRR().then((stats) => {
             this.mrrStatsLoading = false;
-            const statsData = stats.data;
-            let currencyStats = statsData[0] || {
+            const statsData = stats.data || [];
+            const defaultCurrency = this.getDefaultCurrency() || 'usd';
+            let currencyStats = statsData.find((stat) => {
+                return stat.currency === defaultCurrency;
+            });
+            currencyStats = currencyStats || {
                 data: [],
-                currency: 'usd'
+                currency: defaultCurrency
             };
             if (currencyStats) {
                 const currencyStatsData = this.membersStats.fillDates(currencyStats.data) || {};
-                const dateValues = Object.values(currencyStatsData).map(val => val / 100);
+                const dateValues = Object.values(currencyStatsData).map(val => Math.round((val / 100)));
                 const currentMRR = dateValues.length ? dateValues[dateValues.length - 1] : 0;
                 const rangeStartMRR = dateValues.length ? dateValues[0] : 0;
                 const percentGrowth = rangeStartMRR !== 0 ? ((currentMRR - rangeStartMRR) / rangeStartMRR) * 100 : 0;
                 this.mrrStatsData = {
-                    current: `${getSymbol(currencyStats.currency)}${currentMRR}`,
+                    currentAmount: currentMRR,
+                    currency: getSymbol(currencyStats.currency),
                     percentGrowth: percentGrowth.toFixed(1),
                     percentClass: (percentGrowth > 0 ? 'positive' : (percentGrowth < 0 ? 'negative' : '')),
                     options: {
@@ -237,6 +228,12 @@ export default class DashboardController extends Controller {
             this.whatsNewEntriesError = error;
             this.whatsNewEntriesLoading = false;
         });
+    }
+
+    getDefaultCurrency() {
+        const plans = this.settings.get('stripePlans') || [];
+        const monthly = plans.find(plan => plan.interval === 'month');
+        return monthly && monthly.currency;
     }
 
     @action

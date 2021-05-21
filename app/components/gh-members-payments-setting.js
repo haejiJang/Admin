@@ -3,15 +3,14 @@ import {computed} from '@ember/object';
 import {currencies} from 'ghost-admin/utils/currency';
 import {reads} from '@ember/object/computed';
 import {inject as service} from '@ember/service';
-import {task} from 'ember-concurrency';
+import {task, timeout} from 'ember-concurrency';
 
 export default Component.extend({
-    feature: service(),
     config: service(),
-    mediaQueries: service(),
     ghostPaths: service(),
     ajax: service(),
     settings: service(),
+    store: service(),
 
     topCurrencies: null,
     currencies: null,
@@ -19,16 +18,11 @@ export default Component.extend({
     stripePlanInvalidAmount: false,
     _scratchStripeYearlyAmount: null,
     _scratchStripeMonthlyAmount: null,
-    showLeaveSettingsModal: false,
 
     // passed in actions
     setStripeConnectIntegrationTokenSetting() {},
 
-    defaultContentVisibility: reads('settings.defaultContentVisibility'),
-
     stripeDirect: reads('config.stripeDirect'),
-
-    allowSelfSignup: reads('settings.membersAllowFreeSignup'),
 
     /** OLD **/
     stripeDirectPublicKey: reads('settings.stripePublishableKey'),
@@ -38,16 +32,8 @@ export default Component.extend({
     stripeConnectAccountName: reads('settings.stripeConnectDisplayName'),
     stripeConnectLivemode: reads('settings.stripeConnectLivemode'),
 
-    portalSettingsBorderColor: reads('settings.accentColor'),
-
     selectedCurrency: computed('stripePlans.monthly.currency', function () {
-        return this.get('currencies').findBy('value', this.get('stripePlans.monthly.currency'));
-    }),
-
-    blogDomain: computed('config.blogDomain', function () {
-        let blogDomain = this.config.blogDomain || '';
-        const domainExp = blogDomain.replace('https://', '').replace('http://', '').match(new RegExp('^([^/:?#]+)(?:[/:?#]|$)', 'i'));
-        return (domainExp && domainExp[1]) || '';
+        return this.get('currencies').findBy('value', this.get('stripePlans.monthly.currency')) || this.get('topCurrencies').findBy('value', this.get('stripePlans.monthly.currency'));
     }),
 
     stripePlans: computed('settings.stripePlans', function () {
@@ -106,23 +92,6 @@ export default Component.extend({
     },
 
     actions: {
-        closePortalSettings() {
-            const changedAttributes = this.settings.changedAttributes();
-            if (changedAttributes && Object.keys(changedAttributes).length > 0) {
-                this.set('showLeaveSettingsModal', true);
-            } else {
-                this.set('showPortalSettings', false);
-            }
-        },
-
-        setDefaultContentVisibility(value) {
-            this.setDefaultContentVisibility(value);
-        },
-
-        toggleSelfSignup() {
-            this.set('settings.membersAllowFreeSignup', !this.get('allowSelfSignup'));
-        },
-
         setStripeDirectPublicKey(event) {
             this.set('settings.stripeProductName', this.get('settings.title'));
             this.set('settings.stripePublishableKey', event.target.value);
@@ -182,16 +151,6 @@ export default Component.extend({
 
         disconnectStripeConnectIntegration() {
             this.disconnectStripeConnectIntegration.perform();
-        },
-
-        closeLeaveSettingsModal() {
-            this.set('showLeaveSettingsModal', false);
-        },
-
-        leavePortalSettings() {
-            this.settings.rollbackAttributes();
-            this.set('showPortalSettings', false);
-            this.set('showLeaveSettingsModal', false);
         },
 
         openStripeSettings() {
@@ -267,16 +226,86 @@ export default Component.extend({
 
         yield this.ajax.delete(url);
         yield this.settings.reload();
+
+        this.onDisconnected?.();
     }),
+
+    calculateDiscount(monthly, yearly) {
+        if (isNaN(monthly) || isNaN(yearly)) {
+            return 0;
+        }
+
+        return monthly ? 100 - Math.floor((yearly / 12 * 100) / monthly) : 0;
+    },
+
+    getActivePrice(prices, interval, amount, currency) {
+        return prices.find((price) => {
+            return (
+                price.active && price.amount === amount && price.type === 'recurring' &&
+                price.interval === interval && price.currency.toLowerCase() === currency.toLowerCase()
+            );
+        });
+    },
+
+    updatePortalPlans(monthlyPriceId, yearlyPriceId) {
+        let portalPlans = ['free'];
+        if (monthlyPriceId) {
+            portalPlans.push(monthlyPriceId);
+        }
+        if (yearlyPriceId) {
+            portalPlans.push(yearlyPriceId);
+        }
+        this.settings.set('portalPlans', portalPlans);
+    },
 
     saveStripeSettings: task(function* () {
         this.set('stripeConnectError', null);
         this.set('stripeConnectSuccess', null);
         if (this.get('settings.stripeConnectIntegrationToken')) {
             try {
-                const response = yield this.settings.save();
+                let response = yield this.settings.save();
+
+                const products = yield this.store.query('product', {include: 'stripe_prices'});
+                this.product = products.firstObject;
+
+                if (this.product) {
+                    const stripePrices = this.product.stripePrices || [];
+                    const yearlyDiscount = this.calculateDiscount(5, 50);
+                    stripePrices.push(
+                        {
+                            nickname: 'Monthly',
+                            amount: 500,
+                            active: 1,
+                            description: 'Full access',
+                            currency: 'usd',
+                            interval: 'month',
+                            type: 'recurring'
+                        },
+                        {
+                            nickname: 'Yearly',
+                            amount: 5000,
+                            active: 1,
+                            currency: 'usd',
+                            description: yearlyDiscount > 0 ? `${yearlyDiscount}% discount` : 'Full access',
+                            interval: 'year',
+                            type: 'recurring'
+                        }
+                    );
+                    this.product.set('stripePrices', stripePrices);
+                    yield timeout(3000);
+                    const updatedProduct = yield this.product.save();
+                    const monthlyPrice = this.getActivePrice(updatedProduct.stripePrices, 'month', 500, 'usd');
+                    const yearlyPrice = this.getActivePrice(updatedProduct.stripePrices, 'year', 5000, 'usd');
+                    this.updatePortalPlans(monthlyPrice.id, yearlyPrice.id);
+                    this.settings.set('membersMonthlyPriceId', monthlyPrice.id);
+                    this.settings.set('membersYearlyPriceId', yearlyPrice.id);
+                    response = yield this.settings.save();
+                }
+
                 this.set('membersStripeOpen', false);
                 this.set('stripeConnectSuccess', true);
+                this.onConnected?.();
+
                 return response;
             } catch (error) {
                 if (error.payload && error.payload.errors) {
@@ -288,6 +317,10 @@ export default Component.extend({
         } else {
             this.set('stripeConnectError', 'Please enter a secure key');
         }
+    }).drop(),
+
+    saveSettings: task(function* () {
+        return yield this.settings.save();
     }).drop(),
 
     get liveStripeConnectAuthUrl() {

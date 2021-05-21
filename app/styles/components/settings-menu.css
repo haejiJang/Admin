@@ -148,6 +148,7 @@
 
 .settings-menu-content .gh-image-uploader {
     margin: 0 0 1.6rem 0;
+    background: color-mod(var(--whitegrey-l1) l(+2%));
 }
 
 .settings-menu-content .gh-image-uploader .description {
@@ -163,6 +164,26 @@
     min-height: 50px;
     max-height: 250px;
     margin-top: 0;
+}
+
+.settings-menu-content .gh-radio {
+    margin: 20px 0; 
+}
+
+.settings-menu-content .no-selection {
+    margin-top: -16px;
+}
+
+.settings-menu-content .gh-radio-desc {
+    margin: 8px 0 0 -32px;
+}
+
+.settings-menu-content .select-members {
+    margin-bottom: .4rem;
+}
+
+.settings-menu-content .segment-totals {
+    line-height: 1.65;
 }
 
 .settings-menu-content textarea {
@@ -231,6 +252,10 @@
 .post-setting-custom-excerpt {
     font-size: 1.5rem;
     line-height: 1.35em;
+}
+
+.settings-menu-content .gh-seo-preview-title {
+    white-space: inherit;
 }
 
 .settings-menu-content .CodeMirror {

@@ -10,7 +10,7 @@
     min-height: 72px;
     overflow: hidden;
     margin: 0;
-    padding: 18px 32px;
+    padding: 18px 32px 16px;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
     background: var(--white);
@@ -39,8 +39,9 @@
     width: 64px;
 }
 
-.gh-post-preview-btn-group button span {
-    height: 40px;
+.gh-post-preview-btn-group .gh-btn-group span {
+    height: 36px;
+    line-height: 34px;
     border-radius: 3px;
 }
 
@@ -76,7 +77,7 @@
 
 .gh-post-preview-browser-container iframe {
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
     border: none;
 }
 
@@ -149,6 +150,8 @@
 }
 
 .gh-post-preview-email-mockup {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
     overflow: hidden;
     max-width: 740px;
@@ -168,9 +171,9 @@
 }
 
 .gh-post-preview-email-container iframe {
+    flex-grow: 1;
     border: none;
     width: 100%;
-    height: calc(100% - 67px);
 }
 
 .gh-post-preview-email-input {
@@ -382,7 +385,7 @@
 
 .gh-social-og-likes svg {
     width: 20px;
-    height: auto;
+    height: 20px;
 }
 
 .gh-social-og-comments {
@@ -488,6 +491,7 @@
 
 .gh-social-twitter-preview-meta {
     display: flex;
+    align-items: center;
     overflow: hidden;
     overflow-wrap: break-word;
     width: 487px;
@@ -511,7 +515,7 @@
 
 .gh-social-twitter-preview-meta svg {
     width: 16px;
-    height: auto;
+    height: 16px;
     margin-right: 2px;
 }
 
@@ -635,14 +639,11 @@
 }
 
 .gh-seo-preview-desc {
-    max-height: 45px;
-    overflow: hidden;
     color: #4d5156;
     font-family: Arial, sans-serif;
     font-size: 14px;
     line-height: 22px;
     font-weight: 400;
-    text-overflow: ellipsis;
 }
 
 .gh-seo-preview-desc.editable:hover {

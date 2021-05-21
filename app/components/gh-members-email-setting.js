@@ -19,9 +19,7 @@ const REPLY_ADDRESSES = [
 ];
 
 export default Component.extend({
-    feature: service(),
     config: service(),
-    mediaQueries: service(),
     ghostPaths: service(),
     ajax: service(),
     settings: service(),
@@ -30,9 +28,7 @@ export default Component.extend({
     showFromAddressConfirmation: false,
     showSupportAddressConfirmation: false,
     showEmailDesignSettings: false,
-    showLeaveSettingsModal: false,
 
-    // passed in actions
     mailgunIsConfigured: reads('config.mailgunIsConfigured'),
     emailTrackOpens: reads('settings.emailTrackOpens'),
 
@@ -59,7 +55,11 @@ export default Component.extend({
     blogDomain: computed('config.blogDomain', function () {
         let blogDomain = this.config.blogDomain || '';
         const domainExp = blogDomain.replace('https://', '').replace('http://', '').match(new RegExp('^([^/:?#]+)(?:[/:?#]|$)', 'i'));
-        return (domainExp && domainExp[1]) || '';
+        const domain = (domainExp && domainExp[1]) || '';
+        if (domain.startsWith('www.')) {
+            return domain.replace(/^(www)\.(?=[^/]*\..{2,5})/, '');
+        }
+        return domain;
     }),
 
     mailgunRegion: computed('settings.mailgunBaseUrl', function () {
@@ -132,10 +132,6 @@ export default Component.extend({
             const newReplyAddress = event.value;
 
             this.set('settings.membersReplyAddress', newReplyAddress);
-        },
-
-        closeLeaveSettingsModal() {
-            this.set('showLeaveSettingsModal', false);
         }
     },
 

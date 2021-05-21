@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import validator from 'validator';
 import {action} from '@ember/object';
-import {htmlSafe} from '@ember/string';
+import {htmlSafe} from '@ember/template';
 import {inject as service} from '@ember/service';
 import {task} from 'ember-concurrency-decorators';
 import {timeout} from 'ember-concurrency';
@@ -23,6 +23,7 @@ export default class ModalPostPreviewEmailComponent extends Component {
     @service ajax;
     @service config;
     @service ghostPaths;
+    @service session;
     @service settings;
 
     @tracked html = '';
@@ -46,6 +47,12 @@ export default class ModalPostPreviewEmailComponent extends Component {
             iframe.contentWindow.document.write(this.html);
             iframe.contentWindow.document.close();
         }
+    }
+
+    @action
+    async initPreviewEmailAddress() {
+        const user = await this.session.user;
+        this.previewEmailAddress = user.email;
     }
 
     @task({drop: true})

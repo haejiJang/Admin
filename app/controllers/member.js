@@ -146,8 +146,9 @@ export default class MemberController extends Controller {
     *fetchMemberTask(memberId) {
         this.isLoading = true;
 
-        this.member = yield this.store.findRecord('member', memberId, {
-            reload: true
+        this.member = yield this.store.queryRecord('member', {
+            id: memberId,
+            include: 'email_recipients,products'
         });
 
         this.isLoading = false;
@@ -158,7 +159,7 @@ export default class MemberController extends Controller {
     _saveMemberProperty(propKey, newValue) {
         let currentValue = this.member.get(propKey);
 
-        if (newValue) {
+        if (newValue && typeof newValue === 'string') {
             newValue = newValue.trim();
         }
 

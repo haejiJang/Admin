@@ -13,15 +13,18 @@
             <p>
                 다음 멤버들에게 메일이 전송됩니다 <br>
                 <strong>
-                    {{#if (eq this.model.sendEmailWhenPublished '유료 멤버')}}
+                    {{#if (eq this.model.sendEmailWhenPublished 'status:-free')}}
                         {{!-- TODO: remove editor fallback once editors can query member counts --}}
-                        {{if this.session.user.isEditor "모든 유료 멤버" (gh-pluralize this.paidMemberCount "유료 멤버")}}
-                    {{else if (eq this.model.sendEmailWhenPublished '무료 멤버')}}
+                        {{if this.session.user.isEditor "all paid members" (gh-pluralize this.model.memberCount "paid member")}}
+                    {{else if (eq this.model.sendEmailWhenPublished 'status:free')}}
                         {{!-- TODO: remove editor fallback once editors can query member counts --}}
-                        {{if this.session.user.isEditor "모든 무료 멤버" (gh-pluralize this.freeMemberCount "무료 멤버")}}
+                        {{if this.session.user.isEditor "all free members" (gh-pluralize this.model.memberCount "free member")}}
+                    {{else if (eq this.model.sendEmailWhenPublished 'status:free,status:-free')}}
+                        {{!-- TODO: remove editor fallback once editors can query member counts --}}
+                        {{if this.session.user.isEditor "all members" (gh-pluralize this.model.memberCount "member")}}
                     {{else}}
                         {{!-- TODO: remove editor fallback once editors can query member counts --}}
-                        {{if this.session.user.isEditor "모든 멤버" (gh-pluralize this.model.memberCount "멤버")}}
+                        {{if this.session.user.isEditor "a custom members segment" (gh-pluralize this.model.memberCount "member")}}
                     {{/if}}
                 </strong>
                 그리고 사이트에 {{#if this.model.isScheduled}}설정한 시간에{{/if}} 게시될 예정입니다.

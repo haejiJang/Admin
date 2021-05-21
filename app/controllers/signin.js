@@ -3,7 +3,7 @@ import Controller, {inject as controller} from '@ember/controller';
 import ValidationEngine from 'ghost-admin/mixins/validation-engine';
 import {alias} from '@ember/object/computed';
 import {computed} from '@ember/object';
-import {htmlSafe} from '@ember/string';
+import {htmlSafe} from '@ember/template';
 import {isArray as isEmberArray} from '@ember/array';
 import {isVersionMismatchError} from 'ghost-admin/services/ajax';
 import {inject as service} from '@ember/service';
@@ -36,7 +36,7 @@ export default Controller.extend(ValidationEngine, {
     signin: alias('model'),
 
     accentColor: computed('config.accent_color', function () {
-        let color = this.get('config.accent_color') || '#15171A';
+        let color = this.get('config.accent_color');
         return color;
     }),
 
@@ -47,7 +47,7 @@ export default Controller.extend(ValidationEngine, {
             return htmlSafe(`background-image: url(${icon})`);
         }
 
-        icon = 'https://static.ghost.org/v3.0.0/images/ghost-squircle.png';
+        icon = 'https://static.ghost.org/v4.0.0/images/ghost-orb-2.png';
         return htmlSafe(`background-image: url(${icon})`);
     }),
 

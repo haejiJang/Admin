@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import boundOneWay from 'ghost-admin/utils/bound-one-way';
+import copyTextToClipboard from 'ghost-admin/utils/copy-text-to-clipboard';
 import isNumber from 'ghost-admin/utils/isNumber';
 import validator from 'validator';
 import windowProxy from 'ghost-admin/utils/window-proxy';
@@ -15,11 +16,13 @@ export default Controller.extend({
     config: service(),
     dropdown: service(),
     ghostPaths: service(),
+    limit: service(),
     notifications: service(),
     session: service(),
     slugGenerator: service(),
 
     personalToken: null,
+    limitErrorMessage: null,
     personalTokenRegenerated: false,
     leaveSettingsTransition: null,
     dirtyAttributes: false,
@@ -27,8 +30,9 @@ export default Controller.extend({
     showSuspendUserModal: false,
     showTransferOwnerModal: false,
     showUploadCoverModal: false,
-    showUplaodImageModal: false,
+    showUploadImageModal: false,
     showRegenerateTokenModal: false,
+    showRoleSelectionModal: false,
     _scratchFacebook: null,
     _scratchTwitter: null,
 
@@ -81,6 +85,11 @@ export default Controller.extend({
     }),
 
     actions: {
+        toggleRoleSelectionModal(event) {
+            event?.preventDefault?.();
+            this.toggleProperty('showRoleSelectionModal');
+        },
+
         changeRole(newRole) {
             this.user.set('role', newRole);
             this.set('dirtyAttributes', true);
@@ -110,7 +119,25 @@ export default Controller.extend({
 
         toggleUnsuspendUserModal() {
             if (this.deleteUserActionIsVisible) {
-                this.toggleProperty('showUnsuspendUserModal');
+                if (this.user.role.name !== 'Contributor'
+                    && this.limit.limiter
+                    && this.limit.limiter.isLimited('staff')
+                ) {
+                    this.limit.limiter.errorIfWouldGoOverLimit('staff')
+                        .then(() => {
+                            this.toggleProperty('showUnsuspendUserModal');
+                        })
+                        .catch((error) => {
+                            if (error.errorType === 'HostLimitError') {
+                                this.limitErrorMessage = error.message;
+                                this.toggleProperty('showUnsuspendUserModal');
+                            } else {
+                                this.notifications.showAPIError(error, {key: 'staff.limit'});
+                            }
+                        });
+                } else {
+                    this.toggleProperty('showUnsuspendUserModal');
+                }
             }
         },
 
@@ -471,5 +498,10 @@ export default Controller.extend({
                 this.notifications.showAPIError(error, {key: 'user.update'});
             }
         }
-    }).group('saveHandlers')
+    }).group('saveHandlers'),
+
+    copyContentKey: task(function* () {
+        copyTextToClipboard(this.personalToken);
+        yield timeout(this.isTesting ? 50 : 3000);
+    })
 });

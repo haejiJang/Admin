@@ -6,7 +6,7 @@
 
 <div class="modal-body">
     <p>
-        현재 적용된 PLAN은 <strong>{{gh-pluralize upgradeMessage.limit "member"}}</strong> 명을 보유할 수 있습니다. 현재 <strong>{{gh-pluralize upgradeMessage.total "member"}}</strong> 보유 중 입니다.
+        {{html-safe upgradeMessage.message}}
     </p>
 </div>
 

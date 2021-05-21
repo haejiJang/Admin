@@ -7,7 +7,7 @@ import {
     IMAGE_MIME_TYPES
 } from 'ghost-admin/components/gh-image-uploader';
 import {action} from '@ember/object';
-import {htmlSafe} from '@ember/string';
+import {htmlSafe} from '@ember/template';
 import {inject as service} from '@ember/service';
 import {task} from 'ember-concurrency-decorators';
 import {timeout} from 'ember-concurrency';
@@ -56,6 +56,7 @@ export default class GhBrandSettingsFormComponent extends Component {
     }
 
     willDestroy() {
+        this.settings.errors.remove('accentColor');
         this.settings.rollbackAttributes();
     }
 
@@ -92,9 +93,9 @@ export default class GhBrandSettingsFormComponent extends Component {
                 return;
             }
 
-            // clear out the accent color
-            this.settings.set('accentColor', '');
-            this.updatePreviewTask.perform();
+            // Don't allow empty accent color
+            this.settings.errors.add('accentColor', 'Please select an accent color');
+            this.settings.hasValidated.pushObject('accentColor');
             return;
         }
 
@@ -115,7 +116,7 @@ export default class GhBrandSettingsFormComponent extends Component {
             this.settings.set('accentColor', newColor);
             this.updatePreviewTask.perform();
         } else {
-            this.settings.errors.add('accentColor', 'The colour should be in valid hex format');
+            this.settings.errors.add('accentColor', 'Please enter a color in hex format');
             this.settings.hasValidated.pushObject('accentColor');
         }
     }

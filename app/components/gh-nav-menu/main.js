@@ -4,7 +4,7 @@ import ctrlOrCmd from 'ghost-admin/utils/ctrl-or-cmd';
 import {and, equal, match, or} from '@ember/object/computed';
 import {computed} from '@ember/object';
 import {getOwner} from '@ember/application';
-import {htmlSafe} from '@ember/string';
+import {htmlSafe} from '@ember/template';
 import {inject as service} from '@ember/service';
 import {task} from 'ember-concurrency';
 
@@ -24,6 +24,7 @@ export default Component.extend(ShortcutsMixin, {
     tagName: '',
 
     iconStyle: '',
+    iconClass: '',
     memberCountLoading: true,
     memberCount: 0,
 
@@ -115,9 +116,10 @@ export default Component.extend(ShortcutsMixin, {
             return;
         }
 
-        let iconUrl = 'https://static.ghost.org/v3.0.0/images/ghost-squircle.png';
+        let iconUrl = 'https://static.ghost.org/v4.0.0/images/ghost-orb-1.png';
 
         this.set('iconStyle', htmlSafe(`background-image: url(${iconUrl})`));
+        this.set('iconClass', 'gh-nav-logo-default');
     }
 
 });

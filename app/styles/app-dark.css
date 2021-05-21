@@ -66,6 +66,7 @@
 @import "layouts/fullscreen-wizard.css";
 @import "layouts/post-preview.css";
 @import "layouts/dashboard.css";
+@import "layouts/products.css";
 
 
 :root {
@@ -239,17 +240,17 @@ input:focus,
     color: var(--white);
 }
 
-.gh-btn-black:hover,
-.gh-btn-primary:hover {
+.gh-btn-black:not(.gh-btn-green):not(.gh-btn-blue):not(.gh-btn-red):hover,
+.gh-btn-primary:not(.gh-btn-green):not(.gh-btn-blue):not(.gh-btn-red):hover {
     background: var(--black) !important;
 }
 
-.gh-btn:not(.gh-btn-green):not(.gh-btn-blue):not(.gh-btn-red):not(.gh-btn-primary):not(.gh-btn-black) {
+.gh-btn:not(.gh-btn-green):not(.gh-btn-blue):not(.gh-btn-red):not(.gh-btn-primary):not(.gh-btn-black):not(.gh-btn-text) {
     background: var(--lightgrey);
     color: var(--black);
 }
 
-.gh-btn:not(.gh-btn-green):not(.gh-btn-blue):not(.gh-btn-red):not(.gh-btn-primary):not(.gh-btn-black):hover {
+.gh-btn:not(.gh-btn-green):not(.gh-btn-blue):not(.gh-btn-red):not(.gh-btn-primary):not(.gh-btn-black):not(.gh-btn-text):hover {
     background: var(--lightgrey-d1);
     color: var(--black);
 }
@@ -446,6 +447,8 @@ input:focus,
 }
 
 .gh-logo,
+.apps-card-app-orb,
+.gh-nav-logo-default,
 .gh-unsplash-logo {
     filter: invert(100%) brightness(150%);
 }
@@ -623,6 +626,10 @@ input:focus,
     mix-blend-mode: normal;
 }
 
+.apps-card-app-icon.id-typeform {
+    filter: invert(100%);
+}
+
 .gh-nav,
 .gh-contentfilter-menu-trigger,
 .gh-contentfilter-menu-trigger--active,
@@ -689,7 +696,7 @@ input:focus,
 
 /* Koenig styles */
 .kg-link-input {
-    border-color: var(--blue) !important;
+    border-color: var(--green) !important;
 }
 
 /* Editor  */
@@ -721,6 +728,28 @@ input:focus,
 
 .settings-menu-delete-button {
     background: var(--main-color-content-greybg) !important;
+}
+
+/* Segment input */
+
+.token-segment-status-free {
+    border: 1px solid var(--green-d1);
+    background: var(--green-d1);
+}
+
+.token-segment-status-paid {
+    border: 1px solid var(--pink-d1);
+    background: var(--pink-d1);
+}
+
+.token-segment-product {
+    background: var(--darkgrey);
+    color: var(--white);
+}
+
+.token-segment-product svg path {
+    stroke: var(--lightgrey);
+    fill: var(--lightgrey);
 }
 
 /* Post preview modal */
@@ -870,4 +899,34 @@ input:focus,
 
 .gh-dashboard-box {
     border-color: var(--lightgrey);
+}
+
+.gh-dashboard-btn {
+    border: none;
+    background: var(--black) !important;
+    color: #394047 !important;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.01), 0 1px 2px rgba(0, 0, 0, 0.05);
+    outline: none;
+}
+    
+.gh-dashboard-btn:hover {
+    background: var(--white);
+}
+
+.gh-notification {
+    background: var(--lightgrey);
+}
+
+/* Opacity needed to display correctly in Safari */
+::selection {
+    background: rgb(55, 59, 67, 0.99);
+}
+
+.user-image {
+    border-color: var(--dark-main-bg-color);
+}
+
+.gh-whats-new-badge-account {
+    top: 0;
+    right: -2px;
 }
