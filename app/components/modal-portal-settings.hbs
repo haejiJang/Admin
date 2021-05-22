@@ -4,15 +4,16 @@
             <GhLoadingSpinner />
         {{else}}
         <div class="gh-portal-settings-sidebar">
-            <h2 class="gh-portal-settings-title">Portal settings</h2>
+            <h2 class="gh-portal-settings-title">Portal 설정</h2>
             <div class="gh-portal-form-wrapper">
                 <fieldset class="gh-portal-settings-form">
                     <div class="gh-portal-setting-section {{if (not-eq this.settings.membersSignupAccess "all") "disabled-overlay"}}" onclick={{action "switchToSignupPage"}}>
-                        <h3 class="gh-portal-setting-sectionheading">Signup options</h3>
+                        <h3 class="gh-portal-setting-sectionheading">가입 옵션</h3>
                         <GhFormGroup @classNames="gh-members-subscribed-checkbox gh-portal-setting-first pb5 mb0">
                             <div class="flex justify-between items-center">
                                 <div class="mr3">
-                                    <h4 class="gh-portal-setting-title">Display name in signup form</h4>
+                                    <h4 class="gh-portal-setting-title">
+                                        회원가입 형식에서 이름 표시하기</h4>
                                 </div>
                                 <div class="for-switch small">
                                     <label
@@ -35,7 +36,7 @@
                         {{#if this.membersUtils.isStripeEnabled}}
                         <div {{did-insert this.refreshAfterStripeConnected}}>
                             <div class="mb3">
-                                <h4 class="gh-portal-setting-title">Prices available at signup</h4>
+                                <h4 class="gh-portal-setting-title">회원가입에서 가능한 PLAN</h4>
                             </div>
                             <div class="form-group mb0 for-checkbox">
                                 <label

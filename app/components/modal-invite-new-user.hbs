@@ -4,13 +4,13 @@
 </header>
 {{!-- disable mouseDown so it doesn't trigger focus-out validations --}}
 <a class="close" href role="button" title="Close" {{action "closeModal"}} {{action (optional this.noop) on="mouseDown"}}>
-    {{svg-jar "close"}}<span class="hidden">Close</span>
+    {{svg-jar "close"}}<span class="hidden">취소</span>
 </a>
 
 <div class="modal-body">
     <fieldset>
         <GhFormGroup @errors={{this.errors}} @hasValidated={{this.hasValidated}} @property="email">
-            <label for="new-user-email">Email address</label>
+            <label for="new-user-email">이메일 주소</label>
             <GhTextInput
                 @class="email"
                 @id="new-user-email"

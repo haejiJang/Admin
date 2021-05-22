@@ -20,16 +20,16 @@
         {{#if this.theme}}
             {{#if this.hasWarningsOrErrors}}
                 <p>
-                    The theme <strong>"{{this.themeName}}"</strong> was installed successfully but we detected some {{if this.validationErrors "errors" "warnings"}}.
+                    <strong>"{{this.themeName}}"</strong> 테마가 안정적으로 설치됐지만, {{if this.validationErrors "오류" "경고"}} 를 발견하였습니다.
                     {{#if this.canActivateTheme}}
-                        You are still able to activate and use the theme but it is recommended to fix these {{if this.validationErrors "errors" "warnings"}} before you do so.
+                        물론 지금 테마를 활성화하고 사용할 수 있지만, {{if this.validationErrors "오류" "경고"}} 를 해결한 후에 사용하시길 추천합니다.
                     {{/if}}
                 </p>
 
                 {{#if this.validationErrors}}
                     <div>
-                        <h2 class="mb0 mt4 f5 fw6">Errors</h2>
-                        <p class="mb2">Highly recommended to fix, functionality <strong>could</strong> be restricted</p>
+                        <h2 class="mb0 mt4 f5 fw6">오류</h2>
+                        <p class="mb2">꼭 수정후에 사용하시는 걸 추천합니다. 기능에 제한이 생길 수 있습니다.</p>
                     </div>
                     <ul class="pa0">
                     {{#each this.validationErrors as |error|}}
@@ -42,7 +42,7 @@
 
                 {{#if this.validationWarnings}}
                     <div>
-                        <h2 class="mb0 mt4 f5 fw6">Warnings</h2>
+                        <h2 class="mb0 mt4 f5 fw6">경고</h2>
                     </div>
                     <ul class="pa0">
                     {{#each this.validationWarnings as |error|}}
@@ -54,24 +54,24 @@
                 {{/if}}
             {{else}}
                 <p>
-                    "{{this.themeName}}" uploaded successfully.
-                    {{#if this.canActivateTheme}}Do you want to activate it now?{{/if}}
+                    "{{this.themeName}}" 의 업로드가 완료됐습니다.
+                    {{#if this.canActivateTheme}}지금 활성화 하시겠어요?{{/if}}
                 </p>
             {{/if}}
         {{else if this.displayOverwriteWarning}}
             <p>
-                The theme folder <strong>"{{this.fileThemeName}}"</strong> already exists. Do you want to overwrite it?
+                <strong>"{{this.fileThemeName}}"</strong> 테마 폴더가 이미 존재합니다. 덮어쓸까요?
             </p>
         {{else if (or this.validationErrors this.fatalValidationErrors)}}
 
             <p>
-                This theme is invalid and cannot be activated. Fix the following errors and re-upload the theme.
+                이런! 테마가 어딘가 결함이 있어서 활성화 할 수 없습니다. 다음 오류들을 해결한 후 다시 업로드하세요.
             </p>
 
             {{#if this.fatalValidationErrors}}
                 <div>
-                    <h2 class="mb0 mt4 f5 fw6">Fatal Errors</h2>
-                    <p class="mb2">Must-fix to activate theme</p>
+                    <h2 class="mb0 mt4 f5 fw6">치명적인 오류</h2>
+                    <p class="mb2">필수 수정 사항</p>
                 </div>
 
                 <ul class="pa0">
@@ -85,8 +85,8 @@
 
             {{#if this.validationErrors}}
                 <div>
-                    <h2 class="mb0 mt4 f5 fw6">Errors</h2>
-                    <p class="mb2">Highly recommended to fix, functionality <strong>could</strong> be restricted</p>
+                    <h2 class="mb0 mt4 f5 fw6">오류</h2>
+                    <p class="mb2">꼭 수정후에 사용하시는 걸 추천합니다. 기능에 제한이 생길 수 있습니다.</p>
                 </div>
                 <ul class="pa0">
                 {{#each this.validationErrors as |error|}}
@@ -115,12 +115,12 @@
 <div class="modal-footer">
     <div class="flex items-center justify-between {{if (or this.displayOverwriteWarning this.canActivateTheme this.validationErrors this.fatalValidationErrors) "flex-auto"}}">
         <button {{action "closeModal"}} disabled={{this.closeDisabled}} class="gh-btn" data-test-close-button>
-            <span>{{#if this.theme}}Close{{else}}Cancel{{/if}}</span>
+            <span>{{#if this.theme}}닫기{{else}}취소{{/if}}</span>
         </button>
         <div class="flex items-center">
             {{#if this.displayOverwriteWarning}}
                 <button {{action "confirmOverwrite"}} class="gh-btn gh-btn-red" data-test-overwrite-button>
-                    <span>Overwrite</span>
+                    <span>덮어쓰기</span>
                 </button>
             {{/if}}
             {{#if this.canActivateTheme}}
@@ -129,8 +129,8 @@
                 </button>
             {{/if}}
             {{#if (or this.validationErrors this.fatalValidationErrors)}}
-                <button {{action "reset"}} class="gh-btn gh-btn-black ml2" data-test-try-again-button>
-                    <span>Retry</span>
+                <button {{action "reset"}} class="gh-btn gh-btn-blue ml2" data-test-try-again-button>
+                    <span>재시도</span>
                 </button>
             {{/if}}
         </div>

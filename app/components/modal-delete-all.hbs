@@ -1,13 +1,13 @@
 <header class="modal-header">
-    <h1>Would you really like to delete all content from your blog?</h1>
+    <h1>블로그의 모든 콘텐츠 삭제를 진행하시겠습니까?</h1>
 </header>
-<a class="close" href="" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">Close</span></a>
+<a class="close" href="" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">취소</span></a>
 
 <div class="modal-body">
-    <p>This is permanent! No backups, no restores, no magic undo button. We warned you, k?</p>
+    <p>이 작업은 영구적입니다. 백업, 복원, 실행 취소가 불가합니다. 신중하게 판단해주세요!</p>
 </div>
 
 <div class="modal-footer">
-    <button {{action "closeModal"}} class="gh-btn"><span>Cancel</span></button>
+    <button {{action "closeModal"}} class="gh-btn"><span>취소</span></button>
     <GhTaskButton @buttonText="Delete" @successText="Deleted" @task={{this.deleteAll}} @class="gh-btn gh-btn-red gh-btn-icon" />
 </div>

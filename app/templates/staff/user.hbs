@@ -23,14 +23,14 @@
                     <GhDropdownButton @dropdownName="user-actions-menu" @classNames="gh-btn gh-btn-white gh-btn-icon only-has-icon user-actions-cog" @title="User Actions" data-test-user-actions={{true}}>
                         <span>
                             {{svg-jar "settings"}}
-                            <span class="hidden">User Settings</span>
+                            <span class="hidden">사용자 설정</span>
                         </span>
                     </GhDropdownButton>
                     <GhDropdown @name="user-actions-menu" @tagName="ul" @classNames="user-actions-menu dropdown-menu dropdown-align-right">
                         {{#if this.canMakeOwner}}
                             <li>
                                 <button {{action "toggleTransferOwnerModal"}}>
-                                    Make Owner
+                                    소유주 만들기
                                 </button>
                                 {{#if this.showTransferOwnerModal}}
                                     <GhFullscreenModal @modal="transfer-owner"
@@ -43,20 +43,20 @@
                         {{#if this.deleteUserActionIsVisible}}
                             <li>
                                 <button {{action "toggleDeleteUserModal"}} class="delete" data-test-delete-button>
-                                    Delete User
+                                    사용자 삭제
                                 </button>
                             </li>
                             {{#if this.user.isActive}}
                                 <li>
                                     <button {{action "toggleSuspendUserModal"}} class="suspend" data-test-suspend-button>
-                                        Suspend User
+                                        사용자 정지
                                     </button>
                                 </li>
                             {{/if}}
                             {{#if this.user.isSuspended}}
                                 <li>
                                     <button {{action "toggleUnsuspendUserModal"}} class="unsuspend" data-test-unsuspend-button>
-                                        Un-suspend User
+                                        사용자 정지 해지
                                     </button>
                                 </li>
                             {{/if}}

@@ -1,11 +1,11 @@
 <header class="modal-header">
-    <h1>Delete member account</h1>
+    <h1>멤버 계정 삭제</h1>
 </header>
-<a class="close" href="" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">Close</span></a>
+<a class="close" href="" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">취소</span></a>
 
 <div class="modal-body">
     <p class="mb6">
-        Permanently delete <strong>{{this.member.email}}</strong> from Ghost.
+        <strong>{{this.member.email}}</strong> 멤버를 Oasis Frog로 부터 영구적으로 삭제
     </p>
 
     {{#if this.hasActiveStripeSubscriptions}}
@@ -20,7 +20,7 @@
                     />
                     <span class="input-toggle-component"></span>
                     <div>
-                        <h4>Also cancel subscription in Stripe</h4>
+                        <h4>카카오 페이 결제도 삭제</h4>
                         <p>If disabled, the member’s premium subscription will continue</p>
                     </div>
                 </label>
@@ -30,6 +30,6 @@
 </div>
 
 <div class="modal-footer">
-    <button {{action "closeModal"}} class="gh-btn"><span>Cancel</span></button>
+    <button {{action "closeModal"}} class="gh-btn"><span>취소</span></button>
     <GhTaskButton @buttonText={{if this.shouldCancelSubscriptions "Delete member + Cancel subscription" "Delete member"}} @successText="Deleted" @task={{this.deleteMember}} @class="gh-btn gh-btn-red gh-btn-icon" />
 </div>

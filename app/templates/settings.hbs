@@ -1,7 +1,7 @@
 <section class="gh-canvas">
     <GhCanvasHeader class="gh-canvas-header">
         <h2 class="gh-canvas-title" data-test-screen-title>
-            Settings
+            설정
         </h2>
     </GhCanvasHeader>
 
@@ -11,8 +11,8 @@
             <LinkTo class="gh-setting-group" @route="settings.general" data-test-nav="general">
                 <span class="yellow">{{svg-jar "settings"}}</span>
                 <div>
-                    <h4>General</h4>
-                    <p>Basic publication details and site metadata</p>
+                    <h4>Settings</h4>
+                    <p>기본 게시 디테일과 사이트 메타데이터</p>
                 </div>
             </LinkTo>
             <button type="button" class="gh-setting-group" {{action (toggle "showBrandingModal" this)}} data-test-nav="branding">
@@ -26,14 +26,14 @@
                 <span class="green">{{svg-jar "view-site"}}</span>
                 <div>
                     <h4>Theme</h4>
-                    <p>Install and update themes</p>
+                    <p>테마를 설치하고 업데이트하세요.</p>
                 </div>
             </LinkTo>
             <LinkTo class="gh-setting-group" @route="settings.navigation" data-test-nav="navigation">
                 <span class="pink">{{svg-jar "compass-2"}}</span>
                 <div>
                     <h4>Navigation</h4>
-                    <p>Set up primary and secondary menus</p>
+                    <p>기본 메뉴와 보조 메뉴를 설정하세요.</p>
                 </div>
             </LinkTo>
         </div>
@@ -51,8 +51,9 @@
             <LinkTo class="gh-setting-group" @route="settings.members-email" data-test-nav="members-email">
                 <span class="yellow">{{svg-jar "email-stroke"}}</span>
                 <div>
-                    <h4>Email newsletter</h4>
-                    <p>Customise emails and set email addresses</p>
+                    <h4>이메일 뉴스레터</h4>
+                    <p>이메일을 변경하고 이메일 주소를 설정하세요.
+                        Customise emails and set email addresses</p>
                 </div>
             </LinkTo>
             {{/if}}
@@ -63,8 +64,9 @@
             <LinkTo class="gh-setting-group" @route="settings.code-injection" data-test-nav="code-injection">
                 <span class="green">{{svg-jar "brackets"}}</span>
                 <div>
-                    <h4>Code injection</h4>
-                    <p>Add code to your publication</p>
+                    <h4>코드 인젝션</h4>
+                    <p>게시된 글에 코드를 추가하세요.
+                        Add code to your publication</p>
                 </div>
             </LinkTo>
             <LinkTo class="gh-setting-group" @route="settings.labs" data-test-nav="labs">

@@ -1,12 +1,12 @@
 <header>
-    <h1>Create your account</h1>
+    <h1>계정을 생성하세요</h1>
 </header>
 
 <form id="setup" class="gh-flow-create">
     <GhProfileImage @email={{this.email}} @setImage={{action "setImage"}} />
 
     <GhFormGroup @errors={{this.errors}} @hasValidated={{this.hasValidated}} @property="blogTitle">
-        <label for="blog-title">Site title</label>
+        <label for="blog-title">사이트 이름</label>
         <span class="gh-input-icon gh-icon-content">
             {{svg-jar "content"}}
             <GhTrimFocusInput
@@ -25,7 +25,7 @@
     </GhFormGroup>
 
     <GhFormGroup @errors={{this.errors}} @hasValidated={{this.hasValidated}} @property="name">
-        <label for="name">Full name</label>
+        <label for="name">이름</label>
         <span class="gh-input-icon gh-icon-user">
             {{svg-jar "user-circle"}}
             <GhTextInput
@@ -44,7 +44,7 @@
     </GhFormGroup>
 
     <GhFormGroup @errors={{this.errors}} @hasValidated={{this.hasValidated}} @property="email">
-        <label for="email">Email address</label>
+        <label for="email">이메일 주소</label>
         <span class="gh-input-icon gh-icon-mail">
             {{svg-jar "email"}}
             <GhTextInput
@@ -64,7 +64,7 @@
     </GhFormGroup>
 
     <GhFormGroup @errors={{this.errors}} @hasValidated={{this.hasValidated}} @property="password">
-        <label for="password">Password</label>
+        <label for="password">비밀번호</label>
         <span class="gh-input-icon gh-icon-lock">
             {{svg-jar "lock"}}
             <GhTextInput
@@ -87,7 +87,7 @@
         {{#if task.isRunning}}
             <span>{{svg-jar "spinner" class="gh-icon-spinner gh-btn-icon-no-margin"}}</span>
         {{else}}
-            <span>Last step: Invite staff users &rarr;</span>
+            <span>마지막 단계: 스태프 멤버를 초대하세요 {{svg-jar "arrow-right-small" class="gh-btn-icon-right"}}</span>
         {{/if}}
     </GhTaskButton>
 </form>

@@ -4,17 +4,17 @@
             {{#unless this.canActivate}}
                 {{this.title}}
             {{else}}
-                {{this.title}} with {{#if this.errors}}errors{{else}}warnings{{/if}}
+                {{this.title}} with {{#if this.errors}}오류{{else}}경고{{/if}}
             {{/unless}}
         </h1>
     </header>
-    <a class="close" href="#" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">Close</span></a>
+    <a class="close" href="#" role="button" title="Close" {{action "closeModal"}}>{{svg-jar "close"}}<span class="hidden">취소</span></a>
 
     <div class="modal-body">
         {{#if this.fatalErrors}}
             <div>
-                <h2 class="mb0 mt4 f5 fw6 red">Fatal Errors</h2>
-                <p class="mb2 red">Must-fix to activate theme</p>
+                <h2 class="mb0 mt4 f5 fw6 red">치명적인 오류</h2>
+                <p class="mb2 red">필수 수정 사항</p>
             </div>
             <ul class="pa0" data-test-theme-fatal-errors>
             {{#each this.fatalErrors as |error|}}
@@ -27,8 +27,8 @@
 
         {{#if this.errors}}
             <div>
-                <h2 class="mb0 mt4 f5 fw6">Errors</h2>
-                <p class="mb2">Highly recommended to fix, functionality <span>could</span> be restricted</p>
+                <h2 class="mb0 mt4 f5 fw6">오류</h2>
+                <p class="mb2">꼭 수정후에 사용하시는 걸 추천합니다. 기능에 제한이 생길 수 있습니다.</p>
             </div>
 
             <ul class="pa0" data-test-theme-errors>
@@ -42,7 +42,7 @@
 
         {{#if (and this.warnings (or this.fatalErrors this.errors))}}
             <div>
-                <h2 class="mb0 mt4 f5 fw6">Warnings</h2>
+                <h2 class="mb0 mt4 f5 fw6">경고</h2>
             </div>
         {{/if}}
         {{#if this.warnings}}

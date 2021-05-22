@@ -1,8 +1,8 @@
 
 <header class="modal-header" data-test-modal="delete-user">
-    <h1>Upgrade to enable publishing</h1>
+    <h1>뉴스레터 전송을 위해서 업그레이드</h1>
 </header>
-<button class="close" title="Close" {{on "click" this.closeModal}}>{{svg-jar "close"}}<span class="hidden">Close</span></button>
+<button class="close" title="Close" {{on "click" this.closeModal}}>{{svg-jar "close"}}<span class="hidden">닫기</span></button>
 
 <div class="modal-body">
     <p>
@@ -12,10 +12,10 @@
 
 <div class="modal-footer">
     <button {{on "click" this.closeModal}} class="gh-btn" data-test-button="cancel-upgrade">
-        <span>Cancel</span>
+        <span>취소</span>
     </button>
 
     <button {{on "click" (action "upgrade")}} class="gh-btn gh-btn-green" data-test-button="upgrade-plan">
-        <span>Upgrade</span>
+        <span>업그레이드</span>
     </button>
 </div>
