@@ -1,6 +1,8 @@
 import Component from '@glimmer/component';
 import {action} from '@ember/object';
 import {inject as service} from '@ember/service';
+import {task} from 'ember-concurrency-decorators';
+import {timeout} from 'ember-concurrency';
 import {tracked} from '@glimmer/tracking';
 
 export default class GhSiteIframeComponent extends Component {
@@ -9,11 +11,20 @@ export default class GhSiteIframeComponent extends Component {
     @tracked isInvisible = this.args.invisibleUntilLoaded;
 
     willDestroy() {
+        if (this.messageListener) {
+            window.removeEventListener('message', this.messageListener);
+        }
         this.args.onDestroyed?.();
     }
 
     get srcUrl() {
-        return this.args.src || `${this.config.get('blogUrl')}/`;
+        const srcUrl = new URL(this.args.src || `${this.config.get('blogUrl')}/`);
+
+        if (this.args.guid) {
+            srcUrl.searchParams.set('v', this.args.guid);
+        }
+
+        return srcUrl.href;
     }
 
     @action
@@ -38,9 +49,43 @@ export default class GhSiteIframeComponent extends Component {
 
     @action
     onLoad(event) {
-        if (this.args.invisibleUntilLoaded) {
-            this.isInvisible = false;
+        this.iframe = event.target;
+
+        if (this.args.invisibleUntilLoaded && typeof this.args.invisibleUntilLoaded === 'boolean') {
+            this.makeVisible.perform();
+        } else {
+            this.args.onLoad?.(this.iframe);
         }
-        this.args.onLoad?.(event);
+    }
+
+    @action
+    attachMessageListener() {
+        if (typeof this.args.invisibleUntilLoaded === 'string') {
+            this.messageListener = (event) => {
+                if (this.isDestroying || this.isDestroyed) {
+                    return;
+                }
+
+                const srcURL = new URL(this.srcUrl);
+                const originURL = new URL(event.origin);
+
+                if (originURL.origin === srcURL.origin) {
+                    if (event.data === this.args.invisibleUntilLoaded || event.data.type === this.args.invisibleUntilLoaded) {
+                        this.makeVisible.perform();
+                    }
+                }
+            };
+
+            window.addEventListener('message', this.messageListener, true);
+        }
+    }
+
+    @task
+    *makeVisible() {
+        // give any scripts a bit of time to render before making visible
+        // allows portal to render it's overlay and prevent site background flashes
+        yield timeout(100);
+        this.isInvisible = false;
+        this.args.onLoad?.(this.iframe);
     }
 }

@@ -4,7 +4,6 @@ import {action} from '@ember/object';
 import {currencies, getCurrencyOptions, getSymbol} from 'ghost-admin/utils/currency';
 import {inject as service} from '@ember/service';
 import {task} from 'ember-concurrency-decorators';
-import {timeout} from 'ember-concurrency';
 import {tracked} from '@glimmer/tracking';
 
 const CURRENCIES = currencies.map((currency) => {
@@ -36,7 +35,8 @@ export default class MembersAccessController extends Controller {
     @tracked stripePlanError = '';
 
     @tracked portalPreviewUrl = '';
-    @tracked portalPreviewGuid = Date.now().valueOf();
+
+    portalPreviewGuid = Date.now().valueOf();
 
     queryParams = ['showPortalSettings'];
 
@@ -110,9 +110,7 @@ export default class MembersAccessController extends Controller {
             // when saved value is 'none' the server won't inject the portal script
             // to work around that and show the expected portal preview we save and
             // force a refresh
-            await this.saveSettingsTask.perform();
-            this.updatePortalPreview();
-            this.portalPreviewGuid = Date.now().valueOf();
+            await this.switchFromNoneTask.perform();
         } else {
             this.updatePortalPreview();
         }
@@ -145,7 +143,7 @@ export default class MembersAccessController extends Controller {
     }
 
     @action
-    validateStripePlans() {
+    validateStripePlans({updatePortalPreview = true} = {}) {
         this.stripePlanError = undefined;
 
         try {
@@ -156,7 +154,9 @@ export default class MembersAccessController extends Controller {
                 throw new TypeError(`Subscription amount must be at least ${symbol}1.00`);
             }
 
-            this.updatePortalPreview();
+            if (updatePortalPreview) {
+                this.updatePortalPreview();
+            }
         } catch (err) {
             this.stripePlanError = err.message;
         }
@@ -171,8 +171,7 @@ export default class MembersAccessController extends Controller {
     @action
     async closeStripeConnect() {
         if (this.stripeEnabledOnOpen !== this.membersUtils.isStripeEnabled) {
-            await this.saveSettingsTask.perform();
-            this.portalPreviewGuid = Date.now().valueOf();
+            await this.saveSettingsTask.perform({forceRefresh: true});
         }
         this.showStripeConnect = false;
     }
@@ -208,7 +207,7 @@ export default class MembersAccessController extends Controller {
     }
 
     @action
-    updatePortalPreview() {
+    updatePortalPreview({forceRefresh} = {}) {
         // TODO: can these be worked out from settings in membersUtils?
         const monthlyPrice = this.stripeMonthlyAmount * 100;
         const yearlyPrice = this.stripeYearlyAmount * 100;
@@ -225,7 +224,7 @@ export default class MembersAccessController extends Controller {
             isYearlyChecked = true;
         }
 
-        this.portalPreviewUrl = this.membersUtils.getPortalPreviewUrl({
+        const newUrl = new URL(this.membersUtils.getPortalPreviewUrl({
             button: false,
             monthlyPrice,
             yearlyPrice,
@@ -233,45 +232,54 @@ export default class MembersAccessController extends Controller {
             isMonthlyChecked,
             isYearlyChecked,
             portalPlans: null
-        });
+        }));
 
-        this.resizePortalPreviewTask.perform();
+        if (forceRefresh) {
+            this.portalPreviewGuid = Date.now().valueOf();
+        }
+        newUrl.searchParams.set('v', this.portalPreviewGuid);
+
+        this.portalPreviewUrl = newUrl;
     }
 
     @action
-    portalPreviewLoaded(event) {
-        this.portalPreviewIframe = event.target;
-        this.resizePortalPreviewTask.perform();
+    portalPreviewInserted(iframe) {
+        this.portalPreviewIframe = iframe;
+
+        if (!this.portalMessageListener) {
+            this.portalMessageListener = (event) => {
+                // don't resize membership portal preview when events fire in customize portal modal
+                if (this.showPortalSettings) {
+                    return;
+                }
+
+                const resizeEvents = ['portal-ready', 'portal-preview-updated'];
+                if (resizeEvents.includes(event.data.type) && event.data.payload?.height) {
+                    this.portalPreviewIframe.parentNode.style.height = `${event.data.payload.height}px`;
+                }
+            };
+
+            window.addEventListener('message', this.portalMessageListener, true);
+        }
     }
 
     @action
     portalPreviewDestroyed() {
         this.portalPreviewIframe = null;
-        this.resizePortalPreviewTask.cancelAll();
-    }
 
-    @task({restartable: true})
-    *resizePortalPreviewTask() {
-        if (this.portalPreviewIframe && this.portalPreviewIframe.contentWindow) {
-            yield timeout(100); // give time for portal to re-render
-
-            const portalIframe = this.portalPreviewIframe.contentWindow.document.querySelector('#ghost-portal-root iframe');
-            if (!portalIframe) {
-                return;
-            }
-
-            const portalContainer = portalIframe.contentWindow.document.querySelector('.gh-portal-popup-container');
-            if (!portalContainer) {
-                return;
-            }
-
-            const height = portalContainer.clientHeight;
-            this.portalPreviewIframe.parentNode.style.height = `${height}px`;
+        if (this.portalMessageListener) {
+            window.removeEventListener('message', this.portalMessageListener);
         }
     }
 
+    @task
+    *switchFromNoneTask() {
+        return yield this.saveSettingsTask.perform({forceRefresh: true});
+    }
+
     async saveProduct() {
-        if (this.product) {
+        const isStripeConnected = this.settings.get('stripeConnectAccountId');
+        if (this.product && isStripeConnected) {
             const stripePrices = this.product.stripePrices || [];
             const monthlyAmount = this.stripeMonthlyAmount * 100;
             const yearlyAmount = this.stripeYearlyAmount * 100;
@@ -389,8 +397,8 @@ export default class MembersAccessController extends Controller {
     }
 
     @task({drop: true})
-    *saveSettingsTask() {
-        yield this.validateStripePlans();
+    *saveSettingsTask(options) {
+        yield this.validateStripePlans({updatePortalPreview: false});
 
         if (this.stripePlanError) {
             return;
@@ -403,7 +411,7 @@ export default class MembersAccessController extends Controller {
         yield this.saveProduct();
         const result = yield this.settings.save();
 
-        this.updatePortalPreview();
+        this.updatePortalPreview(options);
 
         return result;
     }
@@ -413,8 +421,8 @@ export default class MembersAccessController extends Controller {
         const monthlyPrice = this.getPrice(activePrices, 'monthly');
         const yearlyPrice = this.getPrice(activePrices, 'yearly');
 
-        this.stripeMonthlyAmount = (monthlyPrice.amount / 100);
-        this.stripeYearlyAmount = (yearlyPrice.amount / 100);
+        this.stripeMonthlyAmount = monthlyPrice ? (monthlyPrice.amount / 100) : 5;
+        this.stripeYearlyAmount = yearlyPrice ? (yearlyPrice.amount / 100) : 50;
     }
 
     reset() {

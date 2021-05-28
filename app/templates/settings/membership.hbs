@@ -33,7 +33,7 @@
                                         Customize members modal signup flow
                                     </p>
                                 </div>
-                                <button type="button" class="gh-btn gh-btn-green" {{on "click" this.openPortalSettings}} data-test-toggle="portal-settings">
+                                <button type="button" class="gh-btn gh-btn-green" disabled={{eq this.settings.membersSignupAccess "none"}} {{on "click" this.openPortalSettings}} data-test-toggle="portal-settings">
                                     <span>Customise Portal &rarr;</span>
                                 </button>
                             </div>
@@ -48,7 +48,7 @@
             </div>
             <div class="gh-setting-members-portalpreview">
                 <div class="gh-setting-members-portal-mock">
-                    {{#if (eq this.settings.membersSignupAccess 'none')}}
+                    {{#if (or (eq this.settings.membersSignupAccess 'none') this.switchFromNoneTask.isRunning)}}
                         <div class="gh-setting-members-portal-disabled">
                             <span class="lightgrey">{{svg-jar "portal-logo-stroke"}}</span>
                             <h4>Portal disabled</h4>
@@ -56,10 +56,10 @@
                         </div>
                     {{else}}
                         <GhSiteIframe
+                            scrolling="no"
                             @src={{this.portalPreviewUrl}}
-                            @guid={{this.portalPreviewGuid}}
-                            @invisibleUntilLoaded={{true}}
-                            @onLoad={{this.portalPreviewLoaded}}
+                            @invisibleUntilLoaded="portal-ready"
+                            @onInserted={{this.portalPreviewInserted}}
                             @onDestroyed={{this.portalPreviewDestroyed}} />
                     {{/if}}
                 </div>
