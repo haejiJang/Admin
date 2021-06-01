@@ -1,7 +1,7 @@
 <section class="gh-canvas">
     <GhCanvasHeader class="gh-canvas-header">
         <h2 class="gh-canvas-title" data-test-screen-title>
-            <LinkTo @route="settings">Settings</LinkTo>
+            <LinkTo @route="settings">설정</LinkTo>
             <span>{{svg-jar "arrow-right"}}</span>
             Products
         </h2>
@@ -18,7 +18,7 @@
                     {{this.settings.membersFreePriceDescription}}
                 </p>
                 <LinkTo @route="settings.products" class="gh-btn" {{action (toggle "showFreeMembershipModal" this)}}>
-                    <span>Customize</span>
+                    <span>사용자화</span>
                 </LinkTo>
             </div>
 
@@ -32,7 +32,7 @@
                     {{product.description}}
                 </p>
                 <LinkTo @route="settings.product" @model={{product}} class="gh-btn">
-                    <span>Customize</span>
+                    <span>사용자화</span>
                 </LinkTo>
             </div>
             {{/each}}
