@@ -21,21 +21,21 @@
 
         <div class="gh-setting-members-basics">
             <div class="gh-setting-members-basicsform">
-                <p class="intro">Fund your work with subscription revenue. Connect your Stripe account and offer premium content to your audience. Our creators are already making over $2 million per year, while Ghost takes 0% payment fees.</p>
+                {{!-- <p class="intro">Fund your work with subscription revenue. Connect your Stripe account and offer premium content to your audience. Our creators are already making over $2 million per year, while Ghost takes 0% payment fees.</p> --}}
                 <hr>
                 <div>
                     <section class="gh-expandable gh-setting-members-portalcta">
                         <div class="gh-expandable-block">
                             <div class="gh-expandable-header">
-                                <div>
+                                {{!-- <div>
                                     <h4 class="gh-expandable-title">Portal Settings</h4>
                                     <p class="gh-expandable-description">
                                         Customize members modal signup flow
                                     </p>
-                                </div>
-                                <button type="button" class="gh-btn gh-btn-green" disabled={{eq this.settings.membersSignupAccess "none"}} {{on "click" this.openPortalSettings}} data-test-toggle="portal-settings">
+                                </div> --}}
+                                {{!-- <button type="button" class="gh-btn gh-btn-green" disabled={{eq this.settings.membersSignupAccess "none"}} {{on "click" this.openPortalSettings}} data-test-toggle="portal-settings">
                                     <span>Customise Portal &rarr;</span>
-                                </button>
+                                </button> --}}
                             </div>
                         </div>
                     </section>
@@ -48,7 +48,7 @@
             </div>
             <div class="gh-setting-members-portalpreview">
                 <div class="gh-setting-members-portal-mock">
-                    {{#if (or (eq this.settings.membersSignupAccess 'none') this.switchFromNoneTask.isRunning)}}
+                    {{!-- {{#if (or (eq this.settings.membersSignupAccess 'none') this.switchFromNoneTask.isRunning)}}
                         <div class="gh-setting-members-portal-disabled">
                             <span class="lightgrey">{{svg-jar "portal-logo-stroke"}}</span>
                             <h4>Portal disabled</h4>
@@ -61,13 +61,14 @@
                             @invisibleUntilLoaded="portal-ready"
                             @onInserted={{this.portalPreviewInserted}}
                             @onDestroyed={{this.portalPreviewDestroyed}} />
-                    {{/if}}
+                    {{/if}} --}}
                 </div>
             </div>
         </div>
 
         <div class="gh-setting-members-tierscontainer">
             <div class="gh-settings-members-tiersheader">
+                {{!-- 작가가 설정하는 구독료 --}}
                 <h4 class="gh-main-section-header small bn">Membership tiers</h4>
                 <button type="button" class="gh-btn gh-btn-outline gh-btn-stripe-status {{if this.isConnectDisallowed "disabled"}} {{if this.settings.stripeConnectAccountId "connected" ""}}" {{on "click" this.openStripeConnect}}>
                     <span>

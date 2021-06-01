@@ -1,13 +1,13 @@
 <header>
     <h1>스태프 멤버 초대하기</h1>
-    <p>Oasis Frog의 사이트는 다른 사용자들과 협업할 때 가장 빛을 발합니다. 협동하고, 글에 대한 피드백과 아이디어를 공유하세요.</p>
+    <p>당신의 Oasis Frog의 사이트는 다른 사용자와 함께 협업할수록 더욱더 빛을 발할 거에요. 협동하고, 글에 대한 피드백과 아이디어를 공유하세요.</p>
 </header>
 
 <div><img class="gh-flow-faces" src="assets/img/users.png" alt="" /></div>
 
 <form class="gh-flow-invite" {{action "invite" on="submit"}}>
     <GhFormGroup @errors={{this.errors}} @hasValidated={{this.hasValidated}} @property="users">
-        <label for="users">한 줄에 하나의 이메일 주소를 입력하세요, 나머지는 저희가 처리할게요!{{svg-jar "email"}}</label>
+        <label for="users">한 줄에 하나의 이메일 주소를 입력하세요{{svg-jar "email"}}</label>
         <GhTextarea
             @name="users"
             @required="required"
@@ -36,5 +36,5 @@
 </form>
 
 <button class="gh-flow-skip" {{action "skipInvite"}}>
-    나중에 할래요, 먼저 제 사이트를 보여주세요!
+    나중에 할래요, 일단 제 블로그부터 볼래요!
 </button>
